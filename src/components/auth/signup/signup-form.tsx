@@ -1,29 +1,30 @@
 "use client";
 
-import React, { useEffect, useState } from 'react'
-
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useAuth } from "@/providers/AuthProvider";
+import { showToast } from "@/lib/toast";
+
 import Loader from "@/components/shared/Loader";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
+  CardDescription,
+  CardContent,
+  CardAction,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAuth } from "@/providers/AuthProvider";
-import { showToast } from "@/lib/toast";
 
-export default function LoginPage() {
+export default function SignupPage() {
   const router = useRouter();
-  const { login, user, loading } = useAuth();
+  const { user, register, loading } = useAuth();
+
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   useEffect(() => {
@@ -32,11 +33,11 @@ export default function LoginPage() {
     }
   }, [user, router]);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    login(username, password)
+    register(username, email, password)
       .then(() => {
-        router.push("/checkout");
+        router.push("/auth/login");
       })
       .catch(() => {
         showToast({
@@ -49,67 +50,64 @@ export default function LoginPage() {
       });
   };
 
-  if(loading){
-    return <Loader/>
-  }
+  if (loading) return <Loader />;
 
   return (
     <div className="flex min-h-[92vh] items-center justify-center">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
+          <CardTitle>Create a new account</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Enter your details to sign up for Syntra
           </CardDescription>
-          <CardAction>
-            <Button variant="link">
-              <Link href={"/auth/signup/"}>Sign Up</Link>
-            </Button>
-          </CardAction>
+            <CardAction>
+              <Button variant="link">
+                <Link href={"/auth/login"}>Account already exists?</Link>
+              </Button>
+            </CardAction>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleLogin}>
+          <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="username">Username</Label>
                 <Input
                   id="username"
-                  type="username"
-                  placeholder="username"
+                  type="text"
+                  placeholder="your_username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   required
                 />
               </div>
               <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <a
-                    href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </a>
-                </div>
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
                   type="password"
-                  required
+                  placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  required
                 />
               </div>
+              <Button type="submit" className="w-full mt-4">
+                Sign Up
+              </Button>
             </div>
-            <Button type="submit" className="w-full mt-6">
-              Login
-            </Button>
           </form>
         </CardContent>
-        {/* <CardFooter className="flex-col gap-2">
-          <Button variant="outline" className="w-full">
-            Login with Google
-          </Button>
-        </CardFooter> */}
       </Card>
     </div>
   );

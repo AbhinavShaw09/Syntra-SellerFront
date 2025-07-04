@@ -1,9 +1,18 @@
-import React from 'react'
+"use client"
 
-const page = () => {
+import Loader from "@/components/shared/Loader";
+import { useRedirect } from "@/hooks/UseRedirect";
+
+export default function Home() {
+  const {loading} = useRedirect('/auth/login')
+
+  if(loading){
+    return <Loader />;
+  }
+
   return (
-    <div>page</div>
-  )
+    <div>
+      Home
+    </div>
+  );
 }
-
-export default page
