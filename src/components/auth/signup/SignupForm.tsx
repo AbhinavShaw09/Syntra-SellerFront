@@ -53,7 +53,7 @@ export default function SignupPage() {
   if (loading) return <Loader />;
 
   return (
-    <div className="flex min-h-[92vh] items-center justify-center">
+    <div className="flex min-h-[92vh] items-center justify-center m-5">
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>Create a new account</CardTitle>

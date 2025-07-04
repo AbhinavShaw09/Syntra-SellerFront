@@ -1,5 +1,6 @@
 import React from "react";
 import { AuthProvider } from "@/providers/AuthProvider";
+import PageLoaderWrapper from "@/components/shared/PageLoaderWrapper";
 
 interface Props {
   children: React.ReactNode;
@@ -8,7 +9,9 @@ interface Props {
 const AppProviders: React.FC<Props> = ({ children }) => {
   return (
     <React.Fragment>
-      <AuthProvider>{children}</AuthProvider>
+      <AuthProvider>
+        <PageLoaderWrapper>{children}</PageLoaderWrapper>
+      </AuthProvider>
     </React.Fragment>
   );
 };

@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react'
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Loader from "@/components/shared/Loader";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -22,9 +21,10 @@ import { showToast } from "@/lib/toast";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login, user, loading } = useAuth();
+  const { login, user } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
 
   useEffect(() => {
     if (user) {
@@ -49,12 +49,8 @@ export default function LoginPage() {
       });
   };
 
-  if(loading){
-    return <Loader/>
-  }
-
   return (
-    <div className="flex min-h-[92vh] items-center justify-center">
+    <div className="flex min-h-[92vh] items-center justify-center m-5">
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>Login to your account</CardTitle>
