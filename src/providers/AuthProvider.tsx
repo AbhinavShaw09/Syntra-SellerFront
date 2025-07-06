@@ -68,7 +68,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       type LoginResponse = { access_token: string };
 
-      const data = await apiFetch<
+      const Response = await apiFetch<
         LoginResponse,
         { username: string; password: string }
       >(BakckendEndpoints.AUTH.LOGIN, {
@@ -76,7 +76,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         body: { username, password },
       });
 
-      const accessToken = data.access_token;
+      const accessToken = Response.access_token;
       const decoded = jwtDecode<DecodedToken>(accessToken);
 
       localStorage.setItem("accessToken", accessToken);

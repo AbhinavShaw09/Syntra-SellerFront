@@ -7,9 +7,9 @@ export const productSchema = z.object({
     (a) => parseFloat(a as string),
     z.number().positive({ message: "Price must be a positive number." })
   ),
-  stock: z.preprocess(
+  inventory_count: z.preprocess(
     (a) => parseInt(a as string),
-    z.number().int().nonnegative({ message: "Stock must be a non-negative integer." })
+    z.number().int().nonnegative({ message: "Inventory count must be a non-negative integer." })
   ),
 });
 

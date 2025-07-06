@@ -3,5 +3,5 @@ export type Product = {
   name: string;
   category: string;
   price: number;
-  stock: number;
+  inventory_count: number;
 };
