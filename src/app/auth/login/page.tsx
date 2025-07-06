@@ -36,7 +36,7 @@ export default function LoginPage() {
     e.preventDefault();
     login(username, password)
       .then(() => {
-        router.push("/checkout");
+        router.push("/");
       })
       .catch(() => {
         showToast({

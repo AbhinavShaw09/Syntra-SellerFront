@@ -13,6 +13,7 @@ import { BakckendEndpoints } from "@/utils/endpoints";
 
 type DecodedToken = {
   username: string;
+  email: string,
   exp: number;
   iat: number;
 };
