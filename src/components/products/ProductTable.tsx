@@ -23,6 +23,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Product } from "@/types/product";
+import Image from "next/image";
 
 interface ProductTableProps {
   data: Product[];
@@ -33,9 +34,26 @@ const columns: ColumnDef<Product>[] = [
   {
     accessorKey: "name",
     header: "Product Name",
-    cell: ({ row }) => (
-      <div className="font-medium">{row.getValue("name")}</div>
-    ),
+    cell: ({ row }) => {
+      const imageUrl = row.original.image_url;
+      const placeholderImage = "/image-placeholder.png";
+      const finalImageSrc: string =
+        typeof imageUrl === "string" && imageUrl !== ""
+          ? imageUrl
+          : placeholderImage;
+
+      return (
+        <div className="flex items-center gap-2">
+          <Image
+            src={finalImageSrc}
+            alt={placeholderImage}
+            width={50}
+            height={50}
+          />
+          <div className="font-medium">{row.getValue("name")}</div>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "category",
@@ -79,7 +97,6 @@ export function ProductTable({ data, onAddProductClick }: ProductTableProps) {
       columnFilters,
     },
   });
-
   return (
     <>
       {/* Table Controls and Add Button */}
@@ -92,18 +109,15 @@ export function ProductTable({ data, onAddProductClick }: ProductTableProps) {
           }
           className="max-w-sm w-full"
         />
-        <Button
-          onClick={onAddProductClick}
-          className="w-full sm:w-auto"
-        >
+        <Button onClick={onAddProductClick} className="w-full sm:w-auto">
           Add Product
         </Button>
       </div>
 
       {/* Product Table */}
-      <div className="rounded-md border overflow-x-auto">
+      <div className="rounded-xs border overflow-x-auto">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-neutral-900">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {

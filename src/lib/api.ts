@@ -1,4 +1,5 @@
 // lib/api.ts
+import { jwtDecode } from "jwt-decode";
 
 export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
@@ -7,6 +8,14 @@ type ApiOptions<TBody = unknown> = {
   body?: TBody;
   token?: string;
   headers?: HeadersInit;
+  onTokenExpired?: () => void;
+};
+
+type DecodedToken = {
+  username: string;
+  email: string;
+  exp: number;
+  iat: number;
 };
 
 export async function apiFetch<TResponse = unknown, TBody = unknown>(
@@ -14,6 +23,29 @@ export async function apiFetch<TResponse = unknown, TBody = unknown>(
   options: ApiOptions<TBody> = {}
 ): Promise<TResponse> {
   const { method = "GET", body, token, headers = {} } = options;
+  if (token) {
+    try {
+      const decoded = jwtDecode<DecodedToken>(token);
+      if (decoded.exp * 1000 < Date.now()) {
+        if (options?.onTokenExpired) {
+          options.onTokenExpired();
+        } else {
+          localStorage.removeItem("accessToken");
+          window.location.replace("/auth/login");
+        }
+        throw new Error("Token expired. Authentication required.");
+      }
+    } catch (err) {
+      console.error("Failed to decode or validate token:", err);
+      if (options?.onTokenExpired) {
+        options.onTokenExpired();
+      } else {
+        localStorage.removeItem("accessToken");
+        window.location.replace("/auth/login");
+      }
+      throw new Error("Invalid token. Authentication required.");
+    }
+  }
 
   const res = await fetch(`${endpoint}`, {
     method,

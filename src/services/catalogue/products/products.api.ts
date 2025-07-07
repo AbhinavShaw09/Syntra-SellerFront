@@ -4,6 +4,7 @@ import { Product } from "@/types/product";
 import { z } from "zod";
 import { productSchema } from "@/schemas/ProductSchema";
 
+
 type CreateProductPayload = z.infer<typeof productSchema>;
 
 export const fetchAllProducts = async (token?: string): Promise<Product[]> => {

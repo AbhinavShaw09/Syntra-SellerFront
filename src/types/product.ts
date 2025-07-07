@@ -4,4 +4,5 @@ export type Product = {
   category: string;
   price: number;
   inventory_count: number;
+  image_url: string;
 };

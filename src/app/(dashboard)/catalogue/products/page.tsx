@@ -18,6 +18,7 @@ import {
 import NotFound from "../../not-found";
 import Loader from "@/components/shared/Loader";
 
+
 export default function ProductPage() {
   const { user } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
@@ -40,7 +41,9 @@ export default function ProductPage() {
         description: errorMessage || "Please try again.",
       });
     } finally {
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
     }
   }, [user]);
 
@@ -70,7 +73,9 @@ export default function ProductPage() {
         description: errorMessage || "Please try again.",
       });
     } finally {
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
     }
   };
 
@@ -84,7 +89,7 @@ export default function ProductPage() {
   return (
     <div className="container mx-auto py-10 px-4 sm:px-6 lg:px-8">
       <h1 className="text-3xl font-bold mb-6 text-gray-900 dark:text-gray-100">
-        Product Catalog
+        All Products
       </h1>
       <ProductTable
         data={products}

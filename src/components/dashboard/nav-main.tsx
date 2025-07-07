@@ -34,7 +34,7 @@ export function NavMain({
 }) {
   return (
     <SidebarGroup>
-      <SidebarMenuButton tooltip={"title"}>
+      <SidebarMenuButton tooltip={"Home"}>
         <Home />
         <Link href={"/"}>
           <span>{"Home"}</span>
