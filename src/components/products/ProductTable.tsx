@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Product } from "@/types/product";
 import Image from "next/image";
+import { getImage } from "@/utils/image";
 
 interface ProductTableProps {
   data: Product[];
@@ -35,35 +36,30 @@ const columns: ColumnDef<Product>[] = [
     accessorKey: "name",
     header: "Product Name",
     cell: ({ row }) => {
-      const imageUrl = row.original.image_url;
-      const placeholderImage = "/image-placeholder.png";
-      const finalImageSrc: string =
-        typeof imageUrl === "string" && imageUrl !== ""
-          ? imageUrl
-          : placeholderImage;
+      const finalImageSrc: string = getImage(row.original.image_url)
 
       return (
         <div className="flex items-center gap-2">
           <Image
             src={finalImageSrc}
-            alt={placeholderImage}
+            alt={finalImageSrc}
             width={50}
             height={50}
+            className="rounded-xl"
           />
-          <div className="font-medium">{row.getValue("name")}</div>
+          <div className="flex items-center justify-center flex-col">
+            <div className="font-medium">{row.getValue("name")}</div>
+            <div className="font-medium">{row.original.category}</div>
+          </div>
         </div>
       );
     },
   },
   {
-    accessorKey: "category",
-    header: "Category",
-  },
-  {
-    accessorKey: "price",
-    header: () => <div className="text-right">Price</div>,
+    accessorKey: "selling_price",
+    header: () => <div className="text-right">Selling Price</div>,
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("price"));
+      const amount = parseFloat(row.getValue("selling_price"));
       const formatted = new Intl.NumberFormat("en-IN", {
         style: "currency",
         currency: "INR",
@@ -78,7 +74,6 @@ const columns: ColumnDef<Product>[] = [
       <div className="text-right">{row.getValue("inventory_count")}</div>
     ),
   },
-  // Add more columns or actions as needed
 ];
 
 export function ProductTable({ data, onAddProductClick }: ProductTableProps) {
@@ -109,7 +104,7 @@ export function ProductTable({ data, onAddProductClick }: ProductTableProps) {
           }
           className="max-w-sm w-full"
         />
-        <Button onClick={onAddProductClick} className="w-full sm:w-auto">
+        <Button onClick={onAddProductClick} className="w-full sm:w-auto cursor-pointer">
           Add Product
         </Button>
       </div>

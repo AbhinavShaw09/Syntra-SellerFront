@@ -18,7 +18,6 @@ import {
 import NotFound from "../../not-found";
 import Loader from "@/components/shared/Loader";
 
-
 export default function ProductPage() {
   const { user } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
@@ -47,12 +46,6 @@ export default function ProductPage() {
     }
   }, [user]);
 
-  React.useEffect(() => {
-    if (user?.accessToken) {
-      fetchProducts();
-    }
-  }, [fetchProducts, user]);
-
   const handleAddProduct = async (
     newProductData: z.infer<typeof productSchema>
   ) => {
@@ -78,6 +71,12 @@ export default function ProductPage() {
       }, 1000);
     }
   };
+
+  React.useEffect(() => {
+    if (user?.accessToken) {
+      fetchProducts();
+    }
+  }, [fetchProducts, user]);
 
   if (isLoading) {
     return <Loader />;

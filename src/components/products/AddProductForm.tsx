@@ -43,7 +43,8 @@
       defaultValues: {
         name: "",
         category: "",
-        price: 0,
+        original_price: 0,
+        selling_price: 0,
         inventory_count: 0,
       },
     });
@@ -101,10 +102,28 @@
               />
               <FormField
                 control={form.control}
-                name="price"
+                name="original_price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Price</FormLabel>
+                    <FormLabel>Original Price</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        {...field}
+                        onChange={(e) => field.onChange(  (e.target.value))}
+                        value={field.value === 0 ? "" : field.value}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="selling_price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Selling Price</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
