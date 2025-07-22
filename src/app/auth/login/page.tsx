@@ -22,8 +22,8 @@ import { showToast } from "@/lib/toast";
 export default function LoginPage() {
   const router = useRouter();
   const { login, user } = useAuth();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("admin");
+  const [password, setPassword] = useState("abhinav");
 
 
   useEffect(() => {
@@ -96,7 +96,7 @@ export default function LoginPage() {
                 />
               </div>
             </div>
-            <Button type="submit" className="w-full mt-6">
+            <Button type="submit" className="w-full mt-6 cursor-pointer">
               Login
             </Button>
           </form>

@@ -66,13 +66,9 @@ const data = {
       icon: Settings,
       items: [
         {
-          title: "General",
-          url: "/settings/general",
-        },
-        {
-          title: "Billing",
-          url: "/settings/billing",
-        },
+          title: "Account",
+          url: "/settings/account",
+        }
       ],
     },
   ],
