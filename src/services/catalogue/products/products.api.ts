@@ -31,3 +31,16 @@ export const createProductApi = async (
   );
   return createdProduct;
 };
+
+export const deleteProductApi = async (
+  productId: string,
+  token?: string
+): Promise<void> => {
+  await apiFetch<void>(
+    `${BakckendEndpoints.PRODUCT.DELETE_SELLER_PRODUCTS}/${productId}/`,
+    {
+      method: "POST",
+      token: token,
+    }
+  );
+} 

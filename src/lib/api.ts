@@ -1,4 +1,3 @@
-// lib/api.ts
 import { jwtDecode } from "jwt-decode";
 
 export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
@@ -67,6 +66,14 @@ export async function apiFetch<TResponse = unknown, TBody = unknown>(
     );
   }
 
-  const data: TResponse = await res.json();
+  const contentLength = res.headers.get("content-length");
+  if (res.status === 204 || contentLength === "0") {
+    return undefined as TResponse;
+  }
+  const text = await res.text();
+  if (!text) {
+    return undefined as TResponse;
+  }
+  const data: TResponse = JSON.parse(text);
   return data;
 }

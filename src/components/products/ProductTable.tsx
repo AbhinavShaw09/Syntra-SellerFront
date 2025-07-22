@@ -13,6 +13,15 @@ import {
 } from "@tanstack/react-table";
 
 import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+import { IconDotsVertical } from "@tabler/icons-react";
+
+import {
   Table,
   TableBody,
   TableCell,
@@ -29,56 +38,115 @@ import { getImage } from "@/utils/image";
 interface ProductTableProps {
   data: Product[];
   onAddProductClick: () => void;
+  onDeleteProductClick: (productId: string) => void;
+  onDuplicateProductClick: (product: Product) => void;
 }
 
-const columns: ColumnDef<Product>[] = [
-  {
-    accessorKey: "name",
-    header: "Product Name",
-    cell: ({ row }) => {
-      const finalImageSrc: string = getImage(row.original.image_url)
+function getColumns(
+  onDeleteProductClick: (productId: string) => void,
+  onDuplicateProductClick: (product: Product) => void
+): ColumnDef<Product>[] {
+  return [
+    {
+      accessorKey: "name",
+      header: "Product Name",
+      cell: ({ row }) => {
+        const finalImageSrc: string = getImage(row.original.image_url);
 
-      return (
-        <div className="flex items-center gap-2">
-          <Image
-            src={finalImageSrc}
-            alt={finalImageSrc}
-            width={50}
-            height={50}
-            className="rounded-xl"
-          />
-          <div className="flex items-center justify-center flex-col">
-            <div className="font-medium">{row.getValue("name")}</div>
-            <div className="font-medium">{row.original.category}</div>
+        return (
+          <div className="flex items-center gap-2">
+            <Image
+              src={finalImageSrc}
+              alt={finalImageSrc}
+              width={50}
+              height={50}
+              className="rounded-xl"
+            />
+            <div className="flex items-center justify-center flex-col">
+              <div className="font-medium">{row.getValue("name")}</div>
+              <div className="font-medium">{row.original.category}</div>
+            </div>
           </div>
+        );
+      },
+    },
+    {
+      accessorKey: "selling_price",
+      header: () => <div className="text-right">Selling Price</div>,
+      cell: ({ row }) => {
+        const amount = parseFloat(row.getValue("selling_price"));
+        const formatted = new Intl.NumberFormat("en-IN", {
+          style: "currency",
+          currency: "INR",
+        }).format(amount);
+        return <div className="text-right">{formatted}</div>;
+      },
+    },
+    {
+      accessorKey: "inventory_count",
+      header: () => <div className="text-right">Stock</div>,
+      cell: ({ row }) => (
+        <div className="text-right">{row.getValue("inventory_count")}</div>
+      ),
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => (
+        <div className="flex items-center justify-center">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="data-[state=open]:bg-muted text-muted-foreground cursor-pointer"
+              >
+                <IconDotsVertical className="w-4 h-4" />
+                <span className="sr-only">Open menu</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => console.log("Edit")} className="cursor-pointer">
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={handleOnDuplicateProductClick(
+                  row.original,
+                  onDuplicateProductClick
+                )}
+                className="cursor-pointer"
+              >
+                Duplicate
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={handleOnDeleteProductClick(
+                  row.original.id,
+                  onDeleteProductClick
+                )}
+                className="text-red-600 cursor-pointer"
+              >
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
-      );
+      ),
     },
-  },
-  {
-    accessorKey: "selling_price",
-    header: () => <div className="text-right">Selling Price</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("selling_price"));
-      const formatted = new Intl.NumberFormat("en-IN", {
-        style: "currency",
-        currency: "INR",
-      }).format(amount);
-      return <div className="text-right">{formatted}</div>;
-    },
-  },
-  {
-    accessorKey: "inventory_count",
-    header: () => <div className="text-right">Stock</div>,
-    cell: ({ row }) => (
-      <div className="text-right">{row.getValue("inventory_count")}</div>
-    ),
-  },
-];
-
-export function ProductTable({ data, onAddProductClick }: ProductTableProps) {
+  ];
+}
+export function ProductTable({
+  data,
+  onAddProductClick,
+  onDeleteProductClick,
+  onDuplicateProductClick,
+}: ProductTableProps) {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
+  );
+
+  const columns = React.useMemo(
+    () => getColumns(onDeleteProductClick, onDuplicateProductClick),
+    [onDeleteProductClick, onDuplicateProductClick]
   );
 
   const table: TanstackTable<Product> = useReactTable({
@@ -92,6 +160,7 @@ export function ProductTable({ data, onAddProductClick }: ProductTableProps) {
       columnFilters,
     },
   });
+
   return (
     <>
       {/* Table Controls and Add Button */}
@@ -104,7 +173,10 @@ export function ProductTable({ data, onAddProductClick }: ProductTableProps) {
           }
           className="max-w-sm w-full"
         />
-        <Button onClick={onAddProductClick} className="w-full sm:w-auto cursor-pointer">
+        <Button
+          onClick={onAddProductClick}
+          className="w-full sm:w-auto cursor-pointer"
+        >
           Add Product
         </Button>
       </div>
@@ -182,4 +254,24 @@ export function ProductTable({ data, onAddProductClick }: ProductTableProps) {
       </div>
     </>
   );
+}
+
+function handleOnDeleteProductClick(
+  id: string,
+  onDeleteProductClick: (productId: string) => void
+): React.MouseEventHandler<HTMLDivElement> {
+  return (event) => {
+    event.stopPropagation();
+    onDeleteProductClick(id);
+  };
+}
+
+function handleOnDuplicateProductClick(
+  product: Product,
+  onDuplicateProductClick: (product: Product) => void
+): React.MouseEventHandler<HTMLDivElement> {
+  return (event) => {
+    event.stopPropagation();
+    onDuplicateProductClick(product);
+  };
 }

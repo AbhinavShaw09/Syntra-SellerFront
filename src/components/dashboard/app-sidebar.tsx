@@ -47,10 +47,6 @@ const data = {
           title: "Orders",
           url: "/sales/orders",
         },
-        {
-          title: "Abandoned Orders",
-          url: "/sales/abandoned-orders",
-        },
       ],
     },
     {
@@ -61,10 +57,6 @@ const data = {
         {
           title: "Coupons",
           url: "/discounts/coupons",
-        },
-        {
-          title: "Campains",
-          url: "/discounts/campaigns",
         },
       ],
     },

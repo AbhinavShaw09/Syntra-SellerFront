@@ -9,5 +9,7 @@ export const BakckendEndpoints = {
   PRODUCT: {
     LIST_SELLER_PRODUCTS: `${API_BASE}/seller/products/`,
     CREATE_SELLER_PRODUCTS: `${API_BASE}/seller/products/create/`,
+    DELETE_SELLER_PRODUCTS: `${API_BASE}/seller/products`,
+    UPDATE_SELLER_PRODUCTS: `${API_BASE}/seller/products/update/`,
   },
 };

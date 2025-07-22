@@ -1,89 +1,26 @@
 "use client";
 
-import * as React from "react";
-import { useState } from "react";
-import { z } from "zod";
-import { toast } from "sonner";
-
-import { productSchema } from "@/schemas/ProductSchema";
-import { Product } from "@/types/product";
+import React from "react";
 import { AddProductForm } from "@/components/products/AddProductForm";
 import { ProductTable } from "@/components/products/ProductTable";
-import { useAuth } from "@/providers/AuthProvider";
-
-import {
-  fetchAllProducts,
-  createProductApi,
-} from "@/services/catalogue/products/products.api";
 import NotFound from "../../not-found";
 import Loader from "@/components/shared/Loader";
+import { useProductManager } from "@/hooks/product/useProductManager";
 
 export default function ProductPage() {
-  const { user } = useAuth();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [isAddProductFormOpen, setIsAddProductFormOpen] = useState(false);
+  const {
+    products,
+    isLoading,
+    error,
+    isAddProductFormOpen,
+    setIsAddProductFormOpen,
+    handleAddProduct,
+    handleDeleteProduct,
+    handleDuplicateProduct,
+  } = useProductManager();
 
-  const fetchProducts = React.useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await fetchAllProducts(user?.accessToken);
-      setProducts(response);
-    } catch (err: unknown) {
-      console.error("Failed to fetch products:", err);
-      const errorMessage =
-        err instanceof Error ? err.message : "An unknown error occurred.";
-      setError(errorMessage);
-      toast.error("Failed to load products", {
-        description: errorMessage || "Please try again.",
-      });
-    } finally {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 1000);
-    }
-  }, [user]);
-
-  const handleAddProduct = async (
-    newProductData: z.infer<typeof productSchema>
-  ) => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const createdProduct = await createProductApi(
-        newProductData,
-        user?.accessToken
-      );
-      setProducts((prevProducts) => [...prevProducts, createdProduct]);
-      setIsAddProductFormOpen(false);
-    } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error ? err.message : "An unknown error occurred.";
-      setError(errorMessage);
-      toast.error("Failed to create product", {
-        description: errorMessage || "Please try again.",
-      });
-    } finally {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 1000);
-    }
-  };
-
-  React.useEffect(() => {
-    if (user?.accessToken) {
-      fetchProducts();
-    }
-  }, [fetchProducts, user]);
-
-  if (isLoading) {
-    return <Loader />;
-  }
-  if (error) {
-    <NotFound />;
-  }
+  if (isLoading) return <Loader />;
+  if (error) return <NotFound />;
 
   return (
     <div className="container mx-auto py-10 px-4 sm:px-6 lg:px-8">
@@ -93,6 +30,8 @@ export default function ProductPage() {
       <ProductTable
         data={products}
         onAddProductClick={() => setIsAddProductFormOpen(true)}
+        onDeleteProductClick={handleDeleteProduct}
+        onDuplicateProductClick={handleDuplicateProduct}
       />
       <AddProductForm
         isOpen={isAddProductFormOpen}

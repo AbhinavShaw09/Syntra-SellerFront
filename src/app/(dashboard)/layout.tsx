@@ -7,7 +7,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import Loader from "@/components/shared/Loader";
-import { useRedirect } from "@/hooks/UseRedirect";
+import { useRedirect } from "@/hooks/common/UseRedirect";
 
 export default function DashboardLayout({
   children,
