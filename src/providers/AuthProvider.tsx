@@ -10,18 +10,8 @@ import React, {
 import { jwtDecode } from "jwt-decode";
 import { apiFetch } from "@/lib/api";
 import { BakckendEndpoints } from "@/utils/endpoints";
-
-type DecodedToken = {
-  username: string;
-  email: string,
-  exp: number;
-  iat: number;
-};
-
-type User = {
-  accessToken: string;
-  decoded: DecodedToken;
-};
+import { User } from "@/types/common/user";
+import { DecodedToken } from "@/types/common/token";
 
 type AuthContextType = {
   user: User | null;

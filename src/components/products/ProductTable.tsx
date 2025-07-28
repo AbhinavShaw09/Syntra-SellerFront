@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Product } from "@/types/product";
+import { Product } from "@/types/catalogue/product/product";
 import Image from "next/image";
 import { getImage } from "@/utils/image";
 

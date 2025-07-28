@@ -5,7 +5,7 @@ import { AddProductForm } from "@/components/products/AddProductForm";
 import { ProductTable } from "@/components/products/ProductTable";
 import NotFound from "../../not-found";
 import Loader from "@/components/shared/Loader";
-import { useProductManager } from "@/hooks/product/useProductManager";
+import { useProductManager } from "@/hooks/catalogue/product/useProductManager";
 
 export default function ProductPage() {
   const {

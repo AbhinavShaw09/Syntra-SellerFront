@@ -1,18 +1,19 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
 import { z } from "zod";
+import { useState, useCallback, useEffect } from "react";
 
-import { productSchema } from "@/schemas/ProductSchema";
-import { Product } from "@/types/product";
-import { useAuth } from "@/providers/AuthProvider";
+import { productSchema } from "@/schemas/catalogue/product/ProductSchema";
+import { categorySchema } from "@/schemas/catalogue/categories/CategorySchema";
+import { Category } from "@/types/catalogue/category/category";
 import {
-  fetchAllProducts,
-  createProductApi,
-  deleteProductApi,
+    fetchAllProducts,
+    createProductApi,
+    deleteProductApi,
 } from "@/services/catalogue/products/products.api";
 import { generateCopyName } from "@/utils/product";
 
+import { useAuth } from "@/providers/AuthProvider";
 import { useApiHandler } from "@/hooks/common/useApiHandler";
 
 export function useProductManager() {

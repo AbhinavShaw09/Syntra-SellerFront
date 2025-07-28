@@ -1,8 +1,8 @@
+import { z } from "zod";
 import { apiFetch } from "@/lib/api";
 import { BakckendEndpoints } from "@/utils/endpoints";
-import { Product } from "@/types/product";
-import { z } from "zod";
-import { productSchema } from "@/schemas/ProductSchema";
+import { Product } from "@/types/catalogue/product/product";
+import { productSchema } from "@/schemas/catalogue/product/ProductSchema";
 
 
 type CreateProductPayload = z.infer<typeof productSchema>;

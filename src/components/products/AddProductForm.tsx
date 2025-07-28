@@ -23,7 +23,7 @@
     FormLabel,
     FormMessage,
   } from "@/components/ui/form";
-  import { productSchema } from "@/schemas/ProductSchema";
+  import { productSchema } from "@/schemas/catalogue/product/ProductSchema";
 
   interface AddProductFormProps {
     isOpen: boolean;
