@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { AddProductForm } from "@/components/products/AddProductForm";
-import { ProductTable } from "@/components/products/ProductTable";
+import { AddProductForm } from "@/components/catalogue/products/AddProductForm";
+import { ProductTable } from "@/components/catalogue/products/ProductTable";
 import NotFound from "../../not-found";
 import Loader from "@/components/shared/Loader";
 import { useProductManager } from "@/hooks/catalogue/product/useProductManager";

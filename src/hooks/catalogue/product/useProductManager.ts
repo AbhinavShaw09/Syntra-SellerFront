@@ -11,9 +11,10 @@ import {
   createProductApi,
   deleteProductApi,
 } from "@/services/catalogue/products/products.api";
-import { generateCopyName } from "@/utils/product";
-
 import { useApiHandler } from "@/hooks/common/useApiHandler";
+
+import { generateCopyName } from "@/utils/common";
+
 
 export function useProductManager() {
   const { user } = useAuth();

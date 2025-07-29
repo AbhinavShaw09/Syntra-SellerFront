@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -14,6 +14,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Eye } from "lucide-react";
+import { EyeOff } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/providers/AuthProvider";
@@ -24,7 +26,7 @@ export default function LoginPage() {
   const { login, user } = useAuth();
   const [username, setUsername] = useState("admin");
   const [password, setPassword] = useState("abhinav");
-
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -87,13 +89,31 @@ export default function LoginPage() {
                     Forgot your password?
                   </a>
                 </div>
-                <Input
-                  id="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-4 top-2 text-gray-500"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    tabIndex={-1}
+                  >
+                    {showPassword ? (
+                      <span role="img" aria-label="Hide password">
+                        <EyeOff size={20} />
+                      </span>
+                    ) : (
+                      <span role="img" aria-label="Show password">
+                        <Eye size={20} />
+                      </span>
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
             <Button type="submit" className="w-full mt-6 cursor-pointer">
