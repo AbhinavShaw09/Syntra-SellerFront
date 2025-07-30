@@ -100,7 +100,6 @@ export function useCategoryManager() {
     error,
     isAddCategoryFormOpen,
     setIsAddCategoryFormOpen,
-    fetchCategories,
     handleAddCategory,
     handleDuplicateCategory,
     handleDeleteCategory,

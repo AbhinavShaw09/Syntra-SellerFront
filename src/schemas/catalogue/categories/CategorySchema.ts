@@ -7,12 +7,7 @@ export const categorySchema = z.object({
   description: z
     .string()
     .min(2, { message: "Description must be at least 10 characters." }),
-  category: z
-    .string()
-    .min(2, { message: "Category must be at least 5 characters." }),
-  image_url: z
-    .string()
-    .min(2, { message: "Description must be at least 5 characters." }),
+  image_url: z.string().optional(),
 });
 
 export type CategoryFormValues = z.infer<typeof categorySchema>;

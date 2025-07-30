@@ -13,10 +13,10 @@ export const BakckendEndpoints = {
     UPDATE_SELLER_PRODUCTS: `${API_BASE}/seller/products/update/`,
   },
   CATEGORY: {
-    LIST_SELLER_CATEGORIES: `${API_BASE}/seller/category/`,
-    CREATE_SELLER_CATEGORIES: `${API_BASE}/seller/category/create/`,
-    DELETE_SELLER_CATEGORIES: `${API_BASE}/seller/category/`,
-    UPDATE_SELLER_CATEGORIES: `${API_BASE}/seller/category/update/`,
+    LIST_SELLER_CATEGORIES: `${API_BASE}/seller/categories/`,
+    CREATE_SELLER_CATEGORIES: `${API_BASE}/seller/categories/`,
+    DELETE_SELLER_CATEGORIES: `${API_BASE}/seller/categories`,
+    UPDATE_SELLER_CATEGORIES: `${API_BASE}/seller/category/categories`,
   },
   ACCOUNT:{
     GET_ACCOUNT_DETAILS: `${API_BASE}/buyer/account/details/`,
