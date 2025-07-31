@@ -104,7 +104,7 @@ function getColumns(
                 <span className="sr-only">Open menu</span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" side="bottom">
               <DropdownMenuItem onClick={() => console.log("Edit")} className="cursor-pointer">
                 Edit
               </DropdownMenuItem>

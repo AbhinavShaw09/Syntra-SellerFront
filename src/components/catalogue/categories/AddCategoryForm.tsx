@@ -44,7 +44,7 @@ export function AddCategoryForm({
     defaultValues: {
       name: "",
       description: "",
-      image_url: "", // Add this if required by schema
+      image_url: "",
     },
   });
 
@@ -53,7 +53,7 @@ export function AddCategoryForm({
     try {
       onAddCategory(values);
       form.reset();
-      onOpenChange(false); // Close the dialog after successful submission
+      onOpenChange(false);
       toast.success("Category Added!", {
         description: `${values.name} has been added to your catalogue.`,
       });

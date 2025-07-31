@@ -3,17 +3,21 @@
 import React from "react";
 import { Category } from "@/types/catalogue/category/category";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"; // Changed import
+import { IconDotsVertical } from "@tabler/icons-react";
 
 interface CategoryCardListProps {
   data: Category[];
   onDeleteCategoryClick: (id: string) => void;
   onDuplicateCategoryClick: (category: Category) => void;
+  onEditCategoryClick: (category: Category) => void;
   onAddCategoryClick: () => void;
 }
 
@@ -21,6 +25,7 @@ export const CategoryCardList: React.FC<CategoryCardListProps> = ({
   data,
   onDeleteCategoryClick,
   onDuplicateCategoryClick,
+  onEditCategoryClick,
   onAddCategoryClick,
 }) => {
   return (
@@ -32,31 +37,48 @@ export const CategoryCardList: React.FC<CategoryCardListProps> = ({
         {data.map((category) => (
           <Card
             key={category.id}
-            className="hover:shadow-md transition-shadow"
+            className="hover:shadow-md transition-shadow relative" // Added relative
           >
-            <CardHeader>
-              <CardTitle>{category.name}</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-lg font-medium">
+                {category.name}
+              </CardTitle>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="data-[state=open]:bg-muted text-muted-foreground cursor-pointer h-8 w-8"
+                  >
+                    <IconDotsVertical className="w-4 h-4" />
+                    <span className="sr-only">Open menu</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-40 z-50">
+                  <DropdownMenuItem
+                    onClick={() => onEditCategoryClick(category)}
+                  >
+                    Edit
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => onDuplicateCategoryClick(category)}
+                  >
+                    Duplicate
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => onDeleteCategoryClick(category.id)}
+                    className="text-red-600 focus:text-red-600" // Added focus state
+                  >
+                    Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </CardHeader>
             <CardContent className="space-y-2">
               <p className="text-sm text-muted-foreground">
                 {category.description || "No description"}
               </p>
-              <div className="flex gap-2 mt-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => onDuplicateCategoryClick(category)}
-                >
-                  Duplicate
-                </Button>
-                <Button
-                  size="sm"
-                  variant="destructive"
-                  onClick={() => onDeleteCategoryClick(category.id)}
-                >
-                  Delete
-                </Button>
-              </div>
             </CardContent>
           </Card>
         ))}
