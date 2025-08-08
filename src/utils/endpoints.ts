@@ -21,5 +21,17 @@ export const BakckendEndpoints = {
   ACCOUNT:{
     GET_ACCOUNT_DETAILS: `${API_BASE}/buyer/account/details/`,
     UPDATE_ACCOUNT_DETAILS: `${API_BASE}/buyer/account/update/`,
+  },
+  ORDERS: {
+    LIST_SELLER_ORDERS: `${API_BASE}/seller/orders/`,
+    CREATE_SELLER_ORDERS: `${API_BASE}/seller/orders/create/`,
+    UPDATE_SELLER_ORDERS: `${API_BASE}/seller/orders/update/`,
+    DELETE_SELLER_ORDERS: `${API_BASE}/seller/orders/`,
+  },
+  COUPONS: {
+    LIST_SELLER_COUPONS: `${API_BASE}/seller/coupons/`,
+    CREATE_SELLER_COUPONS: `${API_BASE}/seller/coupons/create/`,
+    UPDATE_SELLER_COUPONS: `${API_BASE}/seller/coupons/update/`,
+    DELETE_SELLER_COUPONS: `${API_BASE}/seller/coupons/`,
   }
 };
