@@ -1,57 +1,43 @@
 "use client";
 
-"use client";
-
 import React from "react";
-import useOrders from "@/hooks/sales/useOrders";
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableHead,
-  TableRow,
-  TableCell,
-} from "@/components/ui/table";
+import { AddOrderForm } from "@/components/sales/orders/AddOrderForm";
+import { OrderTable } from "@/components/sales/orders/OrderTable";
+import NotFound from "../../not-found";
 import Loader from "@/components/shared/Loader";
+import { useOrderManager } from "@/hooks/sales/useOrderManager";
 
-const Orders = () => {
-  const { orders, loading, error } = useOrders();
+export default function OrderPage() {
+  const {
+    orders,
+    isLoading,
+    error,
+    isAddOrderFormOpen,
+    setIsAddOrderFormOpen,
+    handleAddOrder,
+    handleDeleteOrder,
+    handleDuplicateOrder,
+  } = useOrderManager();
 
-  if (loading) {
-    return <Loader />;
-  }
-
-  if (error) {
-    return <p className="text-red-500">{error}</p>;
-  }
+  if (isLoading) return <Loader />;
+  if (error) return <NotFound />;
 
   return (
     <div className="container mx-auto py-10 px-4 sm:px-6 lg:px-8">
       <h1 className="text-3xl font-bold mb-6 text-gray-900 dark:text-gray-100">
         All Orders
       </h1>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Order ID</TableHead>
-            <TableHead>Customer Name</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Total</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {orders.map((order) => (
-            <TableRow key={order.id}>
-              <TableCell>{order.id}</TableCell>
-              <TableCell>{order.customerName}</TableCell>
-              <TableCell>{order.date}</TableCell>
-              <TableCell>{order.status}</TableCell>
-              <TableCell>${order.total.toFixed(2)}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <OrderTable
+        data={orders}
+        onAddOrderClick={() => setIsAddOrderFormOpen(true)}
+        onDeleteOrderClick={handleDeleteOrder}
+        onDuplicateOrderClick={handleDuplicateOrder}
+      />
+      <AddOrderForm
+        isOpen={isAddOrderFormOpen}
+        onOpenChange={setIsAddOrderFormOpen}
+        onAddOrder={handleAddOrder}
+      />
     </div>
   );
 }

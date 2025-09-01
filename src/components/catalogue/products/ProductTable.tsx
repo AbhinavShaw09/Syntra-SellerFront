@@ -42,6 +42,26 @@ interface ProductTableProps {
   onDuplicateProductClick: (product: Product) => void;
 }
 
+function handleOnDeleteProductClick(
+  id: string,
+  onDeleteProductClick: (productId: string) => void
+): React.MouseEventHandler<HTMLDivElement> {
+  return (event) => {
+    event.stopPropagation();
+    onDeleteProductClick(id);
+  };
+}
+
+function handleOnDuplicateProductClick(
+  product: Product,
+  onDuplicateProductClick: (product: Product) => void
+): React.MouseEventHandler<HTMLDivElement> {
+  return (event) => {
+    event.stopPropagation();
+    onDuplicateProductClick(product);
+  };
+}
+
 function getColumns(
   onDeleteProductClick: (productId: string) => void,
   onDuplicateProductClick: (product: Product) => void
@@ -256,22 +276,4 @@ export function ProductTable({
   );
 }
 
-function handleOnDeleteProductClick(
-  id: string,
-  onDeleteProductClick: (productId: string) => void
-): React.MouseEventHandler<HTMLDivElement> {
-  return (event) => {
-    event.stopPropagation();
-    onDeleteProductClick(id);
-  };
-}
 
-function handleOnDuplicateProductClick(
-  product: Product,
-  onDuplicateProductClick: (product: Product) => void
-): React.MouseEventHandler<HTMLDivElement> {
-  return (event) => {
-    event.stopPropagation();
-    onDuplicateProductClick(product);
-  };
-}

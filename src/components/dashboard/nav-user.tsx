@@ -23,9 +23,11 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useAuth } from "@/providers/AuthProvider";
+import { useRouter } from "next/navigation";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
+  const router = useRouter();
 
   const { user: SignInUser, logout } = useAuth();
 
@@ -34,6 +36,11 @@ export function NavUser() {
       logout();
     }
   }
+
+  function handleAccountMenuClick() {
+    router.push("/settings/account");
+  }
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -84,7 +91,9 @@ export function NavUser() {
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <BadgeCheck />
-                Account
+                <button className="cursor-pointer" onClick={handleAccountMenuClick}>
+                 Account
+              </button>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

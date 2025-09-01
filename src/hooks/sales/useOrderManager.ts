@@ -12,7 +12,6 @@ import {
   deleteOrderApi,
 } from "@/services/sales/orders.api";
 import { useApiHandler } from "@/hooks/common/useApiHandler";
-import { generateCopyName } from "@/utils/common";
 
 export function useOrderManager() {
   const { user } = useAuth();
@@ -44,28 +43,6 @@ export function useOrderManager() {
     [user?.accessToken, call]
   );
 
-  const handleDuplicateOrder = useCallback(
-    async (order: Order) => {
-      const { customerName, ...rest } = order;
-      const duplicatedOrder = {
-        ...rest,
-        customerName: generateCopyName(
-          customerName,
-          orders.map((o) => o.customerName)
-        ),
-      };
-      const created = await call(
-        () => createOrderApi(duplicatedOrder, user?.accessToken),
-        {
-          errorMessage: "Failed to duplicate order",
-        }
-      );
-      if (created) {
-        setOrders((prev) => [...prev, created]);
-      }
-    },
-    [user?.accessToken, orders, call]
-  );
 
   const handleDeleteOrder = useCallback(
     async (orderId: string) => {
@@ -85,6 +62,23 @@ export function useOrderManager() {
     [user?.accessToken, call]
   );
 
+  const handleDuplicateOrder = useCallback(
+    async (order: Order) => {
+      const { id, ...orderData } = order;
+      const duplicated = await call(
+        () => createOrderApi(orderData, user?.accessToken),
+        {
+          errorMessage: "Failed to duplicate order",
+          successMessage: "Order duplicated successfully",
+        }
+      );
+      if (duplicated) {
+        setOrders((prev) => [...prev, duplicated]);
+      }
+    },
+    [user?.accessToken, call]
+  );
+
   useEffect(() => {
     if (user?.accessToken) {
       fetchOrders();
@@ -99,7 +93,7 @@ export function useOrderManager() {
     setIsAddOrderFormOpen,
     fetchOrders,
     handleAddOrder,
-    handleDuplicateOrder,
     handleDeleteOrder,
+    handleDuplicateOrder,
   };
 }
