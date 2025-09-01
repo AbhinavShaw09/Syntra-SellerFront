@@ -1,5 +1,7 @@
 "use client";
 
+"use client";
+
 import React from "react";
 import useOrders from "@/hooks/sales/useOrders";
 import {
@@ -52,6 +54,4 @@ const Orders = () => {
       </Table>
     </div>
   );
-};
-
-export default Orders;
+}
