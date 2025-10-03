@@ -32,6 +32,22 @@ export const createProductApi = async (
   return createdProduct;
 };
 
+export const updateProductApi = async (
+  productId: string,
+  productData: CreateProductPayload,
+  token?: string
+): Promise<Product> => {
+  const updatedProduct = await apiFetch<Product>(
+    `${BakckendEndpoints.PRODUCT.UPDATE_SELLER_PRODUCTS}${productId}/`,
+    {
+      method: "PATCH",
+      body: productData,
+      token: token,
+    }
+  );
+  return updatedProduct;
+};
+
 export const deleteProductApi = async (
   productId: string,
   token?: string

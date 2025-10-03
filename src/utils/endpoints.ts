@@ -10,7 +10,7 @@ export const BakckendEndpoints = {
     LIST_SELLER_PRODUCTS: `${API_BASE}/seller/products/`,
     CREATE_SELLER_PRODUCTS: `${API_BASE}/seller/products/create/`,
     DELETE_SELLER_PRODUCTS: `${API_BASE}/seller/products`,
-    UPDATE_SELLER_PRODUCTS: `${API_BASE}/seller/products/update/`,
+    UPDATE_SELLER_PRODUCTS: `${API_BASE}/seller/products/`,
   },
   CATEGORY: {
     LIST_SELLER_CATEGORIES: `${API_BASE}/seller/categories/`,

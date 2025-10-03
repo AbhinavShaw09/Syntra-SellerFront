@@ -40,6 +40,17 @@ interface ProductTableProps {
   onAddProductClick: () => void;
   onDeleteProductClick: (productId: string) => void;
   onDuplicateProductClick: (product: Product) => void;
+  onEditProductClick: (product: Product) => void;
+}
+
+function handleOnEditProductClick(
+  product: Product,
+  onEditProductClick: (product: Product) => void
+): React.MouseEventHandler<HTMLDivElement> {
+  return (event) => {
+    event.stopPropagation();
+    onEditProductClick(product);
+  };
 }
 
 function handleOnDeleteProductClick(
@@ -64,7 +75,8 @@ function handleOnDuplicateProductClick(
 
 function getColumns(
   onDeleteProductClick: (productId: string) => void,
-  onDuplicateProductClick: (product: Product) => void
+  onDuplicateProductClick: (product: Product) => void,
+  onEditProductClick: (product: Product) => void
 ): ColumnDef<Product>[] {
   return [
     {
@@ -125,7 +137,13 @@ function getColumns(
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" side="bottom">
-              <DropdownMenuItem onClick={() => console.log("Edit")} className="cursor-pointer">
+              <DropdownMenuItem 
+                onClick={handleOnEditProductClick(
+                  row.original,
+                  onEditProductClick
+                )}
+                className="cursor-pointer"
+              >
                 Edit
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -159,14 +177,15 @@ export function ProductTable({
   onAddProductClick,
   onDeleteProductClick,
   onDuplicateProductClick,
+  onEditProductClick,
 }: ProductTableProps) {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
 
   const columns = React.useMemo(
-    () => getColumns(onDeleteProductClick, onDuplicateProductClick),
-    [onDeleteProductClick, onDuplicateProductClick]
+    () => getColumns(onDeleteProductClick, onDuplicateProductClick, onEditProductClick),
+    [onDeleteProductClick, onDuplicateProductClick, onEditProductClick]
   );
 
   const table: TanstackTable<Product> = useReactTable({

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { AddProductForm } from "@/components/catalogue/products/AddProductForm";
+import { EditProductForm } from "@/components/catalogue/products/EditProductForm";
 import { ProductTable } from "@/components/catalogue/products/ProductTable";
 import NotFound from "../../not-found";
 import Loader from "@/components/shared/Loader";
@@ -14,9 +15,14 @@ export default function ProductPage() {
     error,
     isAddProductFormOpen,
     setIsAddProductFormOpen,
+    isEditProductFormOpen,
+    setIsEditProductFormOpen,
+    editingProduct,
     handleAddProduct,
+    handleEditProduct,
     handleDeleteProduct,
     handleDuplicateProduct,
+    openEditForm,
   } = useProductManager();
 
   if (isLoading) return <Loader />;
@@ -32,11 +38,18 @@ export default function ProductPage() {
         onAddProductClick={() => setIsAddProductFormOpen(true)}
         onDeleteProductClick={handleDeleteProduct}
         onDuplicateProductClick={handleDuplicateProduct}
+        onEditProductClick={openEditForm}
       />
       <AddProductForm
         isOpen={isAddProductFormOpen}
         onOpenChange={setIsAddProductFormOpen}
         onAddProduct={handleAddProduct}
+      />
+      <EditProductForm
+        isOpen={isEditProductFormOpen}
+        onOpenChange={setIsEditProductFormOpen}
+        onEditProduct={handleEditProduct}
+        product={editingProduct}
       />
     </div>
   );

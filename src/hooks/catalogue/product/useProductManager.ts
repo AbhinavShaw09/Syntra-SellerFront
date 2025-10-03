@@ -10,6 +10,7 @@ import {
   fetchAllProducts,
   createProductApi,
   deleteProductApi,
+  updateProductApi,
 } from "@/services/catalogue/products/products.api";
 import { useApiHandler } from "@/hooks/common/useApiHandler";
 
@@ -20,6 +21,8 @@ export function useProductManager() {
   const { user } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const [isAddProductFormOpen, setIsAddProductFormOpen] = useState(false);
+  const [isEditProductFormOpen, setIsEditProductFormOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
   const { isLoading, error, call } = useApiHandler();
 
@@ -69,6 +72,25 @@ export function useProductManager() {
     [user?.accessToken, products, call]
   );
 
+  const handleEditProduct = useCallback(
+    async (productId: string, productData: z.infer<typeof productSchema>) => {
+      const updatedProduct = await call(
+        () => updateProductApi(productId, productData, user?.accessToken),
+        {
+          errorMessage: "Failed to update product",
+        }
+      );
+      if (updatedProduct) {
+        setProducts((prev) =>
+          prev.map((product) => (product.id === productId ? updatedProduct : product))
+        );
+        setIsEditProductFormOpen(false);
+        setEditingProduct(null);
+      }
+    },
+    [user?.accessToken, call]
+  );
+
   const handleDeleteProduct = useCallback(
     async (productId: string) => {
       const deleted = await call(
@@ -87,6 +109,11 @@ export function useProductManager() {
     [user?.accessToken, call]
   );
 
+  const openEditForm = useCallback((product: Product) => {
+    setEditingProduct(product);
+    setIsEditProductFormOpen(true);
+  }, []);
+
   useEffect(() => {
     if (user?.accessToken) {
       fetchProducts();
@@ -99,9 +126,14 @@ export function useProductManager() {
     error,
     isAddProductFormOpen,
     setIsAddProductFormOpen,
+    isEditProductFormOpen,
+    setIsEditProductFormOpen,
+    editingProduct,
     fetchProducts,
     handleAddProduct,
+    handleEditProduct,
     handleDuplicateProduct,
     handleDeleteProduct,
+    openEditForm,
   };
 }
