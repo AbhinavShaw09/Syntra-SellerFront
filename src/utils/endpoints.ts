@@ -16,7 +16,7 @@ export const BakckendEndpoints = {
     LIST_SELLER_CATEGORIES: `${API_BASE}/seller/categories/`,
     CREATE_SELLER_CATEGORIES: `${API_BASE}/seller/categories/`,
     DELETE_SELLER_CATEGORIES: `${API_BASE}/seller/categories`,
-    UPDATE_SELLER_CATEGORIES: `${API_BASE}/seller/category/categories`,
+    UPDATE_SELLER_CATEGORIES: `${API_BASE}/seller/categories`,
   },
   ACCOUNT:{
     GET_ACCOUNT_DETAILS: `${API_BASE}/buyer/account/details/`,

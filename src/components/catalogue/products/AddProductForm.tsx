@@ -23,7 +23,15 @@
     FormLabel,
     FormMessage,
   } from "@/components/ui/form";
+  import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select";
   import { productSchema } from "@/schemas/catalogue/product/ProductSchema";
+  import { useCategories } from "@/hooks/catalogue/product/useCategories";
 
   interface AddProductFormProps {
     isOpen: boolean;
@@ -36,13 +44,15 @@
     onOpenChange,
     onAddProduct,
   }: AddProductFormProps) {
+    const { categories } = useCategories();
+    
     const form = useForm<z.infer<typeof productSchema>>({
       resolver: zodResolver(productSchema) as Resolver<
         z.infer<typeof productSchema>
       >,
       defaultValues: {
         name: "",
-        category: "",
+        category_id: "",
         original_price: 0,
         selling_price: 0,
         inventory_count: 0,
@@ -89,13 +99,24 @@
               />
               <FormField
                 control={form.control}
-                name="category"
+                name="category_id"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Category</FormLabel>
-                    <FormControl>
-                      <Input placeholder="e.g., Electronics" {...field} />
-                    </FormControl>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a category" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {categories.map((category) => (
+                          <SelectItem key={category.id} value={category.id.toString()}>
+                            {category.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}

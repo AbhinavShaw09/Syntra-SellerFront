@@ -23,8 +23,16 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { productSchema } from "@/schemas/catalogue/product/ProductSchema";
 import { Product } from "@/types/catalogue/product/product";
+import { useCategories } from "@/hooks/catalogue/product/useCategories";
 
 interface EditProductFormProps {
   isOpen: boolean;
@@ -39,13 +47,15 @@ export function EditProductForm({
   onEditProduct,
   product,
 }: EditProductFormProps) {
+  const { categories } = useCategories();
+  
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema) as Resolver<
       z.infer<typeof productSchema>
     >,
     defaultValues: {
       name: "",
-      category: "",
+      category_id: "",
       original_price: 0,
       selling_price: 0,
       inventory_count: 0,
@@ -65,7 +75,7 @@ export function EditProductForm({
     if (product && isOpen) {
       form.reset({
         name: product.name || "",
-        category: product.category || "",
+        category_id: product.categories[0]?.id.toString() || "",
         original_price: product.original_price || 0,
         selling_price: product.selling_price || 0,
         inventory_count: product.inventory_count || 0,
@@ -73,7 +83,7 @@ export function EditProductForm({
     } else if (!isOpen) {
       form.reset({
         name: "",
-        category: "",
+        category_id: "",
         original_price: 0,
         selling_price: 0,
         inventory_count: 0,
@@ -107,13 +117,29 @@ export function EditProductForm({
             />
             <FormField
               control={form.control}
-              name="category"
+              name="category_id"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Category</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., Electronics" {...field} />
-                  </FormControl>
+                  <Select 
+                    key={field.value} 
+                    onValueChange={field.onChange} 
+                    value={field.value || ""}
+                    defaultValue={product?.categories[0]?.id.toString()}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {categories.map((category) => (
+                        <SelectItem key={category.id} value={category.id.toString()}>
+                          {category.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

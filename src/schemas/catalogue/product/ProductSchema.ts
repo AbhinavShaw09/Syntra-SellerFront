@@ -4,9 +4,9 @@ export const productSchema = z.object({
   name: z
     .string()
     .min(2, { message: "Product name must be at least 2 characters." }),
-  category: z
+  category_id: z
     .string()
-    .min(2, { message: "Category must be at least 2 characters." }),
+    .min(1, { message: "Please select a category." }),
   original_price: z.preprocess(
     (a) => parseFloat(a as string),
     z.number().positive({ message: "Original price must be a positive number." })

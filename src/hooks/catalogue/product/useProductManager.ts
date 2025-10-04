@@ -58,6 +58,10 @@ export function useProductManager() {
           name,
           products.map((p) => p.name)
         ),
+        category_id: product.categories[0]?.id.toString(),
+        original_price: product.original_price,
+        selling_price: product.selling_price,
+        inventory_count: product.inventory_count,
       };
       const created = await call(
         () => createProductApi(duplicatedProduct, user?.accessToken),

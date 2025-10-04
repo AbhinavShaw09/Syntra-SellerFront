@@ -94,9 +94,9 @@ function getColumns(
               height={50}
               className="rounded-xl"
             />
-            <div className="flex items-center justify-center flex-col">
+            <div className="flex flex-col">
               <div className="font-medium">{row.getValue("name")}</div>
-              <div className="font-medium">{row.original.category}</div>
+              <div className="font-medium">{row.original.categories[0]?.name}</div>
             </div>
           </div>
         );

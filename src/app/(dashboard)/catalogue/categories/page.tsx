@@ -6,6 +6,7 @@ import Loader from "@/components/shared/Loader";
 import { useCategoryManager } from "@/hooks/catalogue/categories/useCategoryManager";
 import { CategoryCardList } from "@/components/catalogue/categories/CategoriesCardList";
 import { AddCategoryForm } from "@/components/catalogue/categories/AddCategoryForm";
+import { EditCategoryForm } from "@/components/catalogue/categories/EditCategoryForm";
 
 const Categories = () => {
   const {
@@ -14,9 +15,14 @@ const Categories = () => {
     error,
     isAddCategoryFormOpen,
     setIsAddCategoryFormOpen,
+    isEditCategoryFormOpen,
+    setIsEditCategoryFormOpen,
+    editingCategory,
     handleAddCategory,
+    handleEditCategory,
     handleDuplicateCategory,
     handleDeleteCategory,
+    openEditForm,
   } = useCategoryManager();
 
   if (isLoading) return <Loader />;
@@ -32,11 +38,18 @@ const Categories = () => {
         onAddCategoryClick={() => setIsAddCategoryFormOpen(true)}
         onDeleteCategoryClick={handleDeleteCategory}
         onDuplicateCategoryClick={handleDuplicateCategory}
+        onEditCategoryClick={openEditForm}
       />
       <AddCategoryForm
         isOpen={isAddCategoryFormOpen}
         onOpenChange={setIsAddCategoryFormOpen}
         onAddCategory={handleAddCategory}
+      />
+      <EditCategoryForm
+        isOpen={isEditCategoryFormOpen}
+        onOpenChange={setIsEditCategoryFormOpen}
+        onEditCategory={handleEditCategory}
+        category={editingCategory}
       />
     </div>
   );

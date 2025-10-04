@@ -32,6 +32,22 @@ export const createCategoryApi = async (
   return createdCategory;
 };
 
+export const updateCategoryApi = async (
+  categoryId: string,
+  categoryData: CreateCategoryPayload,
+  token?: string
+): Promise<Category> => {
+  const updatedCategory = await apiFetch<Category>(
+    `${BakckendEndpoints.CATEGORY.UPDATE_SELLER_CATEGORIES}/${categoryId}/`,
+    {
+      method: "PATCH",
+      body: categoryData,
+      token,
+    }
+  );
+  return updatedCategory;
+};
+
 export const deleteCategoryApi = async (
   categoryId: string,
   token?: string

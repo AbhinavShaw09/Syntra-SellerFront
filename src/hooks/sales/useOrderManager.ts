@@ -64,7 +64,7 @@ export function useOrderManager() {
 
   const handleDuplicateOrder = useCallback(
     async (order: Order) => {
-      const { id, ...orderData } = order;
+      const { ...orderData } = order;
       const duplicated = await call(
         () => createOrderApi(orderData, user?.accessToken),
         {

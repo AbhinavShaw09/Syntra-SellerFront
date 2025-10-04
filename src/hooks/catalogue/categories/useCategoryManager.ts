@@ -10,6 +10,7 @@ import {
   createCategoryApi,
   deleteCategoryApi,
   fetchAllCategories,
+  updateCategoryApi,
 } from "@/services/catalogue/category/category.api";
 
 import { generateCopyName } from "@/utils/common";
@@ -21,6 +22,8 @@ export function useCategoryManager() {
   const { user } = useAuth();
   const [categories, setCategories] = useState<Category[]>([]);
   const [isAddCategoryFormOpen, setIsAddCategoryFormOpen] = useState(false);
+  const [isEditCategoryFormOpen, setIsEditCategoryFormOpen] = useState(false);
+  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
 
   const { isLoading, error, call } = useApiHandler();
 
@@ -42,6 +45,25 @@ export function useCategoryManager() {
       if (created) {
         setCategories((prev) => [...prev, created]);
         setIsAddCategoryFormOpen(false);
+      }
+    },
+    [user?.accessToken, call]
+  );
+
+  const handleEditCategory = useCallback(
+    async (categoryId: string, categoryData: z.infer<typeof categorySchema>) => {
+      const updated = await call(
+        () => updateCategoryApi(categoryId, categoryData, user?.accessToken),
+        {
+          errorMessage: "Failed to update category",
+        }
+      );
+      if (updated) {
+        setCategories((prev) =>
+          prev.map((category) => (category.id === categoryId ? updated : category))
+        );
+        setIsEditCategoryFormOpen(false);
+        setEditingCategory(null);
       }
     },
     [user?.accessToken, call]
@@ -88,6 +110,11 @@ export function useCategoryManager() {
     [user?.accessToken, call]
   );
 
+  const openEditForm = useCallback((category: Category) => {
+    setEditingCategory(category);
+    setIsEditCategoryFormOpen(true);
+  }, []);
+
   useEffect(() => {
     if (user?.accessToken) {
       fetchCategories();
@@ -100,8 +127,13 @@ export function useCategoryManager() {
     error,
     isAddCategoryFormOpen,
     setIsAddCategoryFormOpen,
+    isEditCategoryFormOpen,
+    setIsEditCategoryFormOpen,
+    editingCategory,
     handleAddCategory,
+    handleEditCategory,
     handleDuplicateCategory,
     handleDeleteCategory,
+    openEditForm,
   };
 }
