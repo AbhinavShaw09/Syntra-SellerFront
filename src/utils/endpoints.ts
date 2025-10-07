@@ -24,6 +24,9 @@ export const BakckendEndpoints = {
   },
   ORDERS: {
     LIST_SELLER_ORDERS: `${API_BASE}/seller/orders/`,
+    CREATE_SELLER_ORDERS: `${API_BASE}/seller/orders/`,
+    UPDATE_SELLER_ORDERS: `${API_BASE}/seller/orders/`,
+    DELETE_SELLER_ORDERS: `${API_BASE}/seller/orders/`,
   },
   COUPONS: {
     LIST_SELLER_COUPONS: `${API_BASE}/seller/coupons/`,

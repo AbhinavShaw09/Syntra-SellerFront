@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import { AddOrderForm } from "@/components/sales/orders/AddOrderForm";
 import { OrderTable } from "@/components/sales/orders/OrderTable";
 import NotFound from "../../not-found";
 import Loader from "@/components/shared/Loader";
+import { EditOrderForm } from "@/components/sales/orders/EditOrderForm";
 import { useOrderManager } from "@/hooks/sales/useOrderManager";
 
 export default function OrderPage() {
@@ -12,11 +12,13 @@ export default function OrderPage() {
     orders,
     isLoading,
     error,
-    isAddOrderFormOpen,
-    setIsAddOrderFormOpen,
-    handleAddOrder,
+    isEditOrderFormOpen,
+    setIsEditOrderFormOpen,
+    editingOrder,
     handleDeleteOrder,
     handleDuplicateOrder,
+    handleEditOrder,
+    openEditForm,
   } = useOrderManager();
 
   if (isLoading) return <Loader />;
@@ -29,14 +31,15 @@ export default function OrderPage() {
       </h1>
       <OrderTable
         data={orders}
-        onAddOrderClick={() => setIsAddOrderFormOpen(true)}
         onDeleteOrderClick={handleDeleteOrder}
         onDuplicateOrderClick={handleDuplicateOrder}
+        onEditOrderClick={openEditForm}
       />
-      <AddOrderForm
-        isOpen={isAddOrderFormOpen}
-        onOpenChange={setIsAddOrderFormOpen}
-        onAddOrder={handleAddOrder}
+      <EditOrderForm
+        isOpen={isEditOrderFormOpen}
+        onOpenChange={setIsEditOrderFormOpen}
+        onEditOrder={handleEditOrder}
+        order={editingOrder}
       />
     </div>
   );

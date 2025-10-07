@@ -10,6 +10,7 @@ import {
   fetchAllOrders,
   createOrderApi,
   deleteOrderApi,
+  updateOrderApi,
 } from "@/services/sales/orders.api";
 import { useApiHandler } from "@/hooks/common/useApiHandler";
 
@@ -17,6 +18,8 @@ export function useOrderManager() {
   const { user } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
   const [isAddOrderFormOpen, setIsAddOrderFormOpen] = useState(false);
+  const [isEditOrderFormOpen, setIsEditOrderFormOpen] = useState(false);
+  const [editingOrder, setEditingOrder] = useState<Order | null>(null);
 
   const { isLoading, error, call } = useApiHandler();
 
@@ -79,6 +82,30 @@ export function useOrderManager() {
     [user?.accessToken, call]
   );
 
+  const handleEditOrder = useCallback(
+    async (orderId: string, orderData: z.infer<typeof orderSchema>) => {
+      const updatedOrder = await call(
+        () => updateOrderApi(orderId, orderData, user?.accessToken),
+        {
+          errorMessage: "Failed to update order",
+        }
+      );
+      if (updatedOrder) {
+        setOrders((prev) =>
+          prev.map((order) => (order.id === orderId ? updatedOrder : order))
+        );
+        setIsEditOrderFormOpen(false);
+        setEditingOrder(null);
+      }
+    },
+    [user?.accessToken, call]
+  );
+
+  const openEditForm = useCallback((order: Order) => {
+    setEditingOrder(order);
+    setIsEditOrderFormOpen(true);
+  }, []);
+
   useEffect(() => {
     if (user?.accessToken) {
       fetchOrders();
@@ -91,9 +118,14 @@ export function useOrderManager() {
     error,
     isAddOrderFormOpen,
     setIsAddOrderFormOpen,
+    isEditOrderFormOpen,
+    setIsEditOrderFormOpen,
+    editingOrder,
     fetchOrders,
     handleAddOrder,
     handleDeleteOrder,
     handleDuplicateOrder,
+    handleEditOrder,
+    openEditForm,
   };
 }

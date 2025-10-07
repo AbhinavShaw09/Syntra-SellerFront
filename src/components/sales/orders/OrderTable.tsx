@@ -35,14 +35,25 @@ import { Order } from "@/types/sales/order";
 
 interface OrderTableProps {
   data: Order[];
-  onAddOrderClick: () => void;
   onDeleteOrderClick: (orderId: string) => void;
   onDuplicateOrderClick: (order: Order) => void;
+  onEditOrderClick: (order: Order) => void;
+}
+
+function handleOnEditOrderClick(
+  order: Order,
+  onEditOrderClick: (order: Order) => void
+): React.MouseEventHandler<HTMLDivElement> {
+  return (event) => {
+    event.stopPropagation();
+    onEditOrderClick(order);
+  };
 }
 
 function getColumns(
   onDeleteOrderClick: (orderId: string) => void,
-  onDuplicateOrderClick: (order: Order) => void
+  onDuplicateOrderClick: (order: Order) => void,
+  onEditOrderClick: (order: Order) => void
 ): ColumnDef<Order>[] {
   return [
     {
@@ -89,7 +100,13 @@ function getColumns(
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" side="bottom">
-              <DropdownMenuItem onClick={() => console.log("Edit")} className="cursor-pointer">
+              <DropdownMenuItem 
+                onClick={handleOnEditOrderClick(
+                  row.original,
+                  onEditOrderClick
+                )}
+                className="cursor-pointer"
+              >
                 Edit
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -114,17 +131,17 @@ function getColumns(
 }
 export function OrderTable({
   data,
-  onAddOrderClick,
   onDeleteOrderClick,
   onDuplicateOrderClick,
+  onEditOrderClick,
 }: OrderTableProps) {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
 
   const columns = React.useMemo(
-    () => getColumns(onDeleteOrderClick, onDuplicateOrderClick),
-    [onDeleteOrderClick, onDuplicateOrderClick]
+    () => getColumns(onDeleteOrderClick, onDuplicateOrderClick, onEditOrderClick),
+    [onDeleteOrderClick, onDuplicateOrderClick, onEditOrderClick]
   );
 
   const table: TanstackTable<Order> = useReactTable({
@@ -141,7 +158,7 @@ export function OrderTable({
 
   return (
     <>
-      {/* Table Controls and Add Button */}
+      {/* Table Controls */}
       <div className="flex flex-col sm:flex-row items-center py-4 gap-4 justify-between">
         <Input
           placeholder="Filter orders by customer name..."
@@ -151,12 +168,6 @@ export function OrderTable({
           }
           className="max-w-sm w-full"
         />
-        <Button
-          onClick={onAddOrderClick}
-          className="w-full sm:w-auto cursor-pointer"
-        >
-          Add Order
-        </Button>
       </div>
 
       {/* Order Table */}

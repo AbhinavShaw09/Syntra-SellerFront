@@ -1,56 +1,61 @@
 import { z } from "zod";
-import { orderSchema } from "@/schemas/sales/OrderSchema";
+import { apiFetch } from "@/lib/api";
+import { BakckendEndpoints } from "@/utils/endpoints";
 import { Order } from "@/types/sales/order";
+import { orderSchema } from "@/schemas/sales/OrderSchema";
 
 type CreateOrderPayload = z.infer<typeof orderSchema>;
 
-const mockOrders: Order[] = [
-  { id: "1", customerName: "John Doe", date: "2023-01-15", status: "Delivered", total: 150.00 },
-  { id: "2", customerName: "Jane Smith", date: "2023-01-16", status: "Shipped", total: 75.50 },
-  { id: "3", customerName: "Alice Johnson", date: "2023-01-17", status: "Pending", total: 200.25 },
-];
-
 export const fetchAllOrders = async (token?: string): Promise<Order[]> => {
-  console.log("Fetching orders with token:", token);
-  // In a real application, you would make an API call here.
-  // For now, we're returning mock data.
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(mockOrders);
-    }, 500); // Simulate network delay
-  });
+  const response = await apiFetch<Order[]>(
+    BakckendEndpoints.ORDERS.LIST_SELLER_ORDERS,
+    {
+      token: token,
+    }
+  );
+  return response;
 };
 
 export const createOrderApi = async (
   newOrderData: CreateOrderPayload,
   token?: string
 ): Promise<Order> => {
-  console.log("Creating order with token:", token);
-  // In a real application, you would make an API call here.
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const newOrder: Order = {
-        id: `ORD-${Math.floor(Math.random() * 10000)}`, // mock id
-        date: new Date().toISOString().split('T')[0], // mock date
-        ...newOrderData,
-      };
-      // In a real app, the backend would persist this.
-      // Here we're just returning it. The hook will add it to the state.
-      resolve(newOrder);
-    }, 500);
-  });
+  const createdOrder = await apiFetch<Order>(
+    BakckendEndpoints.ORDERS.CREATE_SELLER_ORDERS,
+    {
+      method: "POST",
+      body: newOrderData,
+      token: token,
+    }
+  );
+  return createdOrder;
+};
+
+export const updateOrderApi = async (
+  orderId: string,
+  orderData: CreateOrderPayload,
+  token?: string
+): Promise<Order> => {
+  const updatedOrder = await apiFetch<Order>(
+    `${BakckendEndpoints.ORDERS.UPDATE_SELLER_ORDERS}${orderId}/`,
+    {
+      method: "PUT",
+      body: orderData,
+      token: token,
+    }
+  );
+  return updatedOrder;
 };
 
 export const deleteOrderApi = async (
   orderId: string,
   token?: string
 ): Promise<void> => {
-  console.log(`Deleting order ${orderId} with token:`, token);
-  // In a real application, you would make an API call here.
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      // Here we would check if the order was successfully deleted on the backend.
-      resolve();
-    }, 500);
-  });
+  await apiFetch<void>(
+    `${BakckendEndpoints.ORDERS.DELETE_SELLER_ORDERS}${orderId}/`,
+    {
+      method: "DELETE",
+      token: token,
+    }
+  );
 };
