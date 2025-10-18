@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import { OrderTable } from "@/components/sales/orders/OrderTable";
 import NotFound from "../../not-found";
 import Loader from "@/components/shared/Loader";
+import { OrderTable } from "@/components/sales/orders/OrderTable";
 import { EditOrderForm } from "@/components/sales/orders/EditOrderForm";
 import { useOrderManager } from "@/hooks/sales/useOrderManager";
 

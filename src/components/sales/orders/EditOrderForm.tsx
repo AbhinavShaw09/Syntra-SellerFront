@@ -16,19 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import {
   Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { orderSchema } from "@/schemas/sales/OrderSchema";
 import { Order } from "@/types/sales/order";
 
@@ -53,15 +41,15 @@ export function EditOrderForm({
     defaultValues: {
       customerName: "",
       total: 0,
-      status: "Pending",
+      status: undefined,
     },
   });
 
   const onSubmit = (values: z.infer<typeof orderSchema>) => {
     if (order) {
       onEditOrder(order.id, values);
-      toast.success("Order Status Updated!", {
-        description: `Order status has been updated to ${values.status}.`,
+      toast.success("Order Updated!", {
+        description: `Order for ${values.customerName} has been updated successfully.`,
       });
     }
   };
@@ -71,13 +59,13 @@ export function EditOrderForm({
       form.reset({
         customerName: order.customerName || "",
         total: order.total || 0,
-        status: order.status || "Pending",
+        status: order.status || undefined,
       });
     } else if (!isOpen) {
       form.reset({
         customerName: "",
         total: 0,
-        status: "Pending",
+        status: undefined,
       });
     }
   }, [order, isOpen, form]);
@@ -86,42 +74,15 @@ export function EditOrderForm({
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit Order Status</DialogTitle>
+          <DialogTitle>Edit Order</DialogTitle>
           <DialogDescription>
-            Update the order status to track fulfillment progress.
+            Update the order details.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-4">
-            <FormField
-              control={form.control}
-              name="status"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Order Status</FormLabel>
-                  <Select 
-                    key={field.value} 
-                    onValueChange={field.onChange} 
-                    value={field.value || "Pending"}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select order status" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Pending">Pending</SelectItem>
-                      <SelectItem value="Shipped">Shipped</SelectItem>
-                      <SelectItem value="Delivered">Delivered</SelectItem>
-                      <SelectItem value="Cancelled">Cancelled</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <Button type="submit" className="w-full">
-              Update Order Status
+              Update Order
             </Button>
           </form>
         </Form>
