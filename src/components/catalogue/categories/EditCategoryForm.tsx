@@ -52,7 +52,7 @@ export function EditCategoryForm({
 
   const onSubmit = (values: z.infer<typeof categorySchema>) => {
     if (category) {
-      onEditCategory(category.id, values);
+      onEditCategory(String(category.id), values);
       toast.success("Category Updated!", {
         description: `${values.name} has been updated successfully.`,
       });

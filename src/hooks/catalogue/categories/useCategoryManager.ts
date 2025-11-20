@@ -60,7 +60,7 @@ export function useCategoryManager() {
       );
       if (updated) {
         setCategories((prev) =>
-          prev.map((category) => (category.id === categoryId ? updated : category))
+          prev.map((category) => (category.id === Number(categoryId) ? updated : category))
         );
         setIsEditCategoryFormOpen(false);
         setEditingCategory(null);
@@ -78,6 +78,7 @@ export function useCategoryManager() {
           name,
           categories.map((c) => c.name)
         ),
+        description: category.description || "",
       };
       const created = await call(
         () => createCategoryApi(duplicatedCategory, user?.accessToken),
@@ -103,7 +104,7 @@ export function useCategoryManager() {
       );
       if (deleted !== null) {
         setCategories((prev) =>
-          prev.filter((category) => category.id !== categoryId)
+          prev.filter((category) => category.id !== Number(categoryId))
         );
       }
     },

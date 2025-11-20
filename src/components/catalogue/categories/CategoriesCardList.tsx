@@ -67,7 +67,7 @@ export const CategoryCardList: React.FC<CategoryCardListProps> = ({
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
-                    onClick={() => onDeleteCategoryClick(category.id)}
+                    onClick={() => onDeleteCategoryClick(String(category.id))}
                     className="text-red-600 focus:text-red-600" // Added focus state
                   >
                     Delete
